@@ -4,7 +4,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import java.util.HashMap;
+
+import java.util.ArrayList;
 import java.util.Map;
 
 @RestController
@@ -35,7 +36,10 @@ public class EmployeeController {
             return "Сотрудник: " + firstName + " " + lastName + " добавлен в список сотрудников.";
             }
     @GetMapping ("/printAll")
-    public Map<String, Employee> printAllEmployees() {
-        return new HashMap<>(service.employeeMap);
+    public StringBuilder printAllEmployees() {
+        StringBuilder result = new StringBuilder();
+        for (Map.Entry <String, Employee> entry: service.employeeMap.entrySet()) {
+            result.append(entry.getValue().toString()).append(" || ");}
+        return result;
     }
 }
