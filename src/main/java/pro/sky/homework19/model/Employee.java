@@ -1,15 +1,19 @@
-package pro.sky.homework19;
+package pro.sky.homework19.model;
 
 import java.util.Objects;
 
 public class Employee {
     private final String firstName;
     private  String lastName;
+    private double salary;
+    private Integer department;
     private final String hashKey;
-    public Employee (String firstName, String lastName) {
+    public Employee (String firstName, String lastName, double salary, int department) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.hashKey = (firstName + lastName).toLowerCase();
+        this.salary = salary;
+        this.department = department;
     }
 
     public String getFirstName() {
@@ -20,9 +24,11 @@ public class Employee {
         return lastName;
     }
     public String getHashKey() { return hashKey;}
+    public double getSalary() {return salary;}
+    public Integer getDepartment() {return department;}
     @Override
     public String toString() {
-        return "Сотрудник: " + firstName + " " + lastName;
+        return "Сотрудник: " + firstName + " " + lastName + " (зарплата: " + salary + " отдел: " + department + ")";
     }
     @Override
     public boolean equals(Object obj){
