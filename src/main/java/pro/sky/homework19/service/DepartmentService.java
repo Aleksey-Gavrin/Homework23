@@ -14,14 +14,14 @@ public class DepartmentService {
         return service.getEmployeeMap().values()
                 .stream()
                 .filter(empl ->  empl.getDepartment().equals(department))
-                .min(Comparator.comparingDouble(empl -> empl.getSalary()))
+                .min(Comparator.comparingDouble(Employee::getSalary))
                 .orElseThrow(EmployeeNotFoundException::new);
     }
     public Employee getEmplWithMaxSalaryInDptmnt(Integer department) {
         return service.getEmployeeMap().values()
                 .stream()
                 .filter(empl ->  empl.getDepartment().equals(department))
-                .max(Comparator.comparingDouble(empl -> empl.getSalary()))
+                .max(Comparator.comparingDouble(Employee::getSalary))
                 .orElseThrow(EmployeeNotFoundException::new);
     }
     public List<Employee> getAllEmplInDptmnt(Integer department) {
@@ -32,19 +32,8 @@ public class DepartmentService {
 
     }
     public Map<Integer, List<Employee>> getAllEmplByDptmnt() {
-                Map<Integer, List<Employee>> resultMap = new HashMap<>();
-                service.getEmployeeMap().values()
-                        .forEach(empl -> {
-                            Integer department = empl.getDepartment();
-                                if (resultMap.containsKey(department)) {
-                                    resultMap.get(department).add(empl);
-                            }   else {
-                                    List<Employee> emplList = new ArrayList<>();
-                                    emplList.add(empl);
-                                    resultMap.put(department, emplList);
-                                }
-                });
-                return resultMap;
+        return service.getEmployeeMap().values()
+                        .stream()
+                        .collect(Collectors.groupingBy(Employee::getDepartment));
     }
-
 }
