@@ -1,20 +1,31 @@
-package pro.sky.homework19;
+package pro.sky.homework19.service;
 
 import org.springframework.stereotype.Service;
 import pro.sky.homework19.exeptions.BadRequestException;
 import pro.sky.homework19.exeptions.EmployeeAlreadyAddedException;
 import pro.sky.homework19.exeptions.EmployeeNotFoundException;
 import pro.sky.homework19.exeptions.EmployeeStorageIsFullException;
+import pro.sky.homework19.model.Employee;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
 @Service
 public class EmployeeService {
-    public static Map<String, Employee> employeeMap = new HashMap<>();
+    private final Map<String, Employee> employeeMap;
+    public EmployeeService() {
+        this.employeeMap = new HashMap<>();
+    }
+
+    public Map<String, Employee> getEmployeeMap() {
+        return employeeMap;
+    }
+
     final int MAX_EMPLOYEES = 15;
 
-    public void addEmployee(String firstName, String lastName) {
+    public Employee addEmployee(String firstName, String lastName, double salary, int department) {
         if (firstName.isBlank() || lastName.isBlank() || !firstName.matches("^[а-яА-я]+$") ||
                 !lastName.matches("^[а-яА-я]+$")) {
             throw new BadRequestException();
@@ -22,11 +33,12 @@ public class EmployeeService {
         if (employeeMap.size() >= MAX_EMPLOYEES) {
             throw new EmployeeStorageIsFullException();
         }
-        Employee empl = new Employee(firstName, lastName);
+        Employee empl = new Employee(firstName, lastName, salary, department);
         if (employeeMap.containsValue(empl)) {
             throw new EmployeeAlreadyAddedException();
         } else {
             employeeMap.put(empl.getHashKey(), empl);
+            return empl;
         }
     }
 
@@ -41,9 +53,12 @@ public class EmployeeService {
             throw new EmployeeNotFoundException();
         }
     }
-    public void removeEmployee(String firstName, String lastName) {
+    public Employee removeEmployee(String firstName, String lastName) {
         Employee empl = findEmployee(firstName, lastName);
-        employeeMap.remove(empl.getHashKey());
+        return employeeMap.remove(empl.getHashKey());
+    }
+    public Collection<Employee> printAll() {
+        return Collections.unmodifiableCollection(employeeMap.values());
     }
 
 }
