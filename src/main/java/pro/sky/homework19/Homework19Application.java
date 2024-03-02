@@ -8,7 +8,7 @@ import pro.sky.homework19.service.EmployeeService;
 @SpringBootApplication
 public class Homework19Application {
 	public static final EmployeeService service = new EmployeeService();
-	public static final DepartmentService deptmntService = new DepartmentService();
+	public static final DepartmentService deptmntService = new DepartmentService(service);
 		public static void main(String[] args) {
 		SpringApplication.run(Homework19Application.class, args);
 		service.addEmployee("Мирон", "Леонов", 66700, 2);

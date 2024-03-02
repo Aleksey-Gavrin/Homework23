@@ -6,8 +6,9 @@ public class Employee {
     private final String firstName;
     private  String lastName;
     private double salary;
-    private Integer department;
+    private int department;
     private final String hashKey;
+
     public Employee (String firstName, String lastName, double salary, int department) {
         this.firstName = firstName;
         this.lastName = lastName;
@@ -23,13 +24,18 @@ public class Employee {
     public String getLastName() {
         return lastName;
     }
+
     public String getHashKey() { return hashKey;}
+
     public double getSalary() {return salary;}
+
     public Integer getDepartment() {return department;}
+
     @Override
     public String toString() {
         return "Сотрудник: " + firstName + " " + lastName + " (зарплата: " + salary + " отдел: " + department + ")";
     }
+
     @Override
     public boolean equals(Object obj){
         if (this == obj) return true;
