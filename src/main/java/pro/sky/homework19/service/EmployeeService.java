@@ -12,9 +12,12 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import static org.apache.commons.lang3.StringUtils.*;
+
 @Service
 public class EmployeeService {
     private final Map<String, Employee> employeeMap;
+
     public EmployeeService() {
         this.employeeMap = new HashMap<>();
     }
@@ -23,13 +26,14 @@ public class EmployeeService {
         return employeeMap;
     }
 
-    final int MAX_EMPLOYEES = 15;
+    final int MAX_EMPLOYEES = 10;
 
     public Employee addEmployee(String firstName, String lastName, double salary, int department) {
-        if (firstName.isBlank() || lastName.isBlank() || !firstName.matches("^[а-яА-я]+$") ||
-                !lastName.matches("^[а-яА-я]+$")) {
+        if (!isAlpha(firstName) || !isAlpha(lastName)) {
             throw new BadRequestException();
         }
+        firstName = capitalize(firstName.toLowerCase());
+        lastName = capitalize(lastName.toLowerCase());
         if (employeeMap.size() >= MAX_EMPLOYEES) {
             throw new EmployeeStorageIsFullException();
         }
@@ -53,10 +57,12 @@ public class EmployeeService {
             throw new EmployeeNotFoundException();
         }
     }
+
     public Employee removeEmployee(String firstName, String lastName) {
         Employee empl = findEmployee(firstName, lastName);
         return employeeMap.remove(empl.getHashKey());
     }
+
     public Collection<Employee> printAll() {
         return Collections.unmodifiableCollection(employeeMap.values());
     }
